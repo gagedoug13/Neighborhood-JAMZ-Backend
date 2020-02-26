@@ -17,13 +17,17 @@ const createSearchParameter = (input) => {
 
 
 const combineAllUrls = (q) => {
-    return baseGoogleUrl + q + endGoogleUrl
+    return baseGoogleUrl + createSearchParameter(q) + endGoogleUrl
 }
 
 
 app.get('/searchAddress', (req, res) => {
-    console.log(createSearchParameter(req.query.q))
+    // console.log(createSearchParameter(req.query.q))
     console.log(combineAllUrls(req.query.q))
+    request({url: combineAllUrls(req.query.q), json: true}, (err, response) => {
+        let latLong = response.body.candidates[0].geometry.location
+        res.send(response.body.status == "OK" ? latLong : "sorry, no results match that search")
+    })
 })
 
 
