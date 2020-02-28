@@ -21,7 +21,7 @@ app.get('/searchAddress', (req, res) => {
         if (response.body.status == "OK") {
             res.send(response.body.candidates[0].geometry.location)
         } else {
-            res.send({error: 'Sorry, that isnt a valid'})
+            res.send({error: 'Sorry, that isnt a valid location.'})
         }
     })
 })
