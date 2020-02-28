@@ -5,6 +5,11 @@ require ('dotenv').config()
 const app = express()
 const baseGoogleUrl = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input='
 const endGoogleUrl = `&inputtype=textquery&fields=geometry&key=${process.env.GOOGLE_KEY}`
+const baseSongkickMetroUrl = `https://api.songkick.com/api/3.0/search/locations.json?location=geo:`
+const endSongkickMetroUrl = `&apikey=${process.env.SONGKICK_KEY}`
+const baseSongkickEventsUrl = `https://api.songkick.com/api/3.0/metro_areas/`
+const exampleSongkickEventRequest = `https://api.songkick.com/api/3.0/metro_areas/6404/calendar.json?min_date=2020-03-15&apikey=${process.env.SONGKICK_KEY}`
+
 
 
 const createSearchParameter = (input) => {
@@ -23,6 +28,22 @@ app.get('/searchAddress', (req, res) => {
         } else {
             res.send({error: 'Sorry, that isnt a valid location.'})
         }
+    })
+})
+
+const songkickMetroUrl = (location) => {
+    return baseSongkickMetroUrl + location + endSongkickMetroUrl
+}
+
+const songkickEventUrl = () => {
+
+}
+
+app.get(`/getMetro`, (req, res) => {
+    request({url: songkickMetroUrl(req.query.location), json: true}, (err, response) => {
+        const metroId = response.body.resultsPage.results.location[0].metroArea.id
+        console.log(metroId)
+
     })
 })
 
