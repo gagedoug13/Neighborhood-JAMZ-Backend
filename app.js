@@ -35,15 +35,17 @@ const songkickMetroUrl = (location) => {
     return baseSongkickMetroUrl + location + endSongkickMetroUrl
 }
 
-const songkickEventUrl = () => {
-
+const songkickEventUrl = (metro, time) => {
+    return baseSongkickEventsUrl + metro + '/calendar.json?min_date=' + time + endSongkickMetroUrl
 }
 
-app.get(`/getMetro`, (req, res) => {
+app.get(`/getMetroAndEvents`, (req, res) => {
     request({url: songkickMetroUrl(req.query.location), json: true}, (err, response) => {
         const metroId = response.body.resultsPage.results.location[0].metroArea.id
-        console.log(metroId)
+        request({url: songkickEventUrl(metroId, req.query.date), json: true}, (err, response) => {
+            res.send(JSON.stringify(response.body.resultsPage.results.event))
 
+        }) 
     })
 })
 
