@@ -8,8 +8,6 @@ const endGoogleUrl = `&inputtype=textquery&fields=geometry&key=${process.env.GOO
 const baseSongkickMetroUrl = `https://api.songkick.com/api/3.0/search/locations.json?location=geo:`
 const endSongkickMetroUrl = `&apikey=${process.env.SONGKICK_KEY}`
 const baseSongkickEventsUrl = `https://api.songkick.com/api/3.0/metro_areas/`
-const exampleSongkickEventRequest = `https://api.songkick.com/api/3.0/metro_areas/6404/calendar.json?min_date=2020-03-15&apikey=${process.env.SONGKICK_KEY}`
-
 
 
 const createSearchParameter = (input) => {
@@ -21,7 +19,6 @@ const combineAllUrls = (q) => {
 }
 
 app.get('/searchAddress', (req, res) => {
-    console.log(combineAllUrls(req.query.q))
     request({url: combineAllUrls(req.query.q), json: true}, (err, response) => {
         if (response.body.status == "OK") {
             res.send(response.body.candidates[0].geometry.location)
@@ -44,7 +41,6 @@ app.get(`/getMetroAndEvents`, (req, res) => {
         const metroId = response.body.resultsPage.results.location[0].metroArea.id
         request({url: songkickEventUrl(metroId, req.query.date), json: true}, (err, response) => {
             res.send(JSON.stringify(response.body.resultsPage.results.event))
-
         }) 
     })
 })
