@@ -39,8 +39,12 @@ const songkickEventUrl = (metro, time) => {
 app.get(`/getMetroAndEvents`, (req, res) => {
     request({url: songkickMetroUrl(req.query.location), json: true}, (err, response) => {
         const metroId = response.body.resultsPage.results.location[0].metroArea.id
-        request({url: songkickEventUrl(metroId, req.query.date), json: true}, (err, response) => {
-            res.send(JSON.stringify(response.body.resultsPage.results.event))
+        request({url: songkickEventUrl(metroId, req.query.date), json: true}, (err, response) => { 
+            if (response.body.resultsPage.totalEntries == 0) {
+                res.send({error: 'No results match that location.'})
+            } else {
+                res.send(JSON.stringify(response.body.resultsPage.results.event))
+            }
         }) 
     })
 })
