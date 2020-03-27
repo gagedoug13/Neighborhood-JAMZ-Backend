@@ -1,5 +1,6 @@
 const express = require('express')
 const request = require('request')
+const path = require('path')
 require ('dotenv').config()
 
 const app = express()
@@ -17,6 +18,8 @@ const createSearchParameter = (input) => {
 const combineAllUrls = (q) => {
     return baseGoogleUrl + createSearchParameter(q) + endGoogleUrl
 }
+
+app.use(express.static(path.join(__dirname, 'build')))
 
 app.get('/searchAddress', (req, res) => {
     request({url: combineAllUrls(req.query.q), json: true}, (err, response) => {
@@ -51,4 +54,4 @@ app.get(`/getMetroAndEvents`, (req, res) => {
 })
 
 
-app.listen(3001, () => console.log('listening on 3001'))
+app.listen(process.env.PORT || 3001, () => console.log('listening on ' + (process.env.PORT || '3001')))
