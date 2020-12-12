@@ -22,10 +22,13 @@ const combineAllUrls = (q) => {
 app.use(express.static(path.join(__dirname, 'build')))
 
 app.get('/searchAddress', (req, res) => {
+    
     request({url: combineAllUrls(req.query.q), json: true}, (err, response) => {
+
         if (response.body.status == "OK") {
             res.send(response.body.candidates[0].geometry.location)
         } else {
+            console.log(response.body)
             res.send({error: 'Sorry, that isnt a valid location.'})
         }
     })
@@ -46,7 +49,6 @@ app.get(`/getMetroAndEvents`, (req, res) => {
             if (response.body.resultsPage.totalEntries === 0) {
                 res.send({error: 'No results match that location.'})
             } else {
-                // console.log(metroId)
                 res.send(JSON.stringify(response.body.resultsPage.results.event))
             }
         }) 
