@@ -18,7 +18,7 @@ const createSearchParameter = (input) => {
 const combineAllUrls = (q) => {
     return baseGoogleUrl + createSearchParameter(q) + endGoogleUrl
 }
-
+console.log('test for deployment')
 app.use(express.static(path.join(__dirname, 'build')))
 
 app.get('/searchAddress', (req, res) => {
