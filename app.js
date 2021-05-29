@@ -3,6 +3,7 @@ const request = require('request')
 const path = require('path')
 require ('dotenv').config()
 
+
 const app = express()
 const baseGoogleUrl = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input='
 const endGoogleUrl = `&inputtype=textquery&fields=geometry&key=${process.env.GOOGLE_KEY}`
@@ -32,6 +33,10 @@ app.get('/searchAddress', (req, res) => {
             res.send({error: 'Sorry, that isnt a valid location.'})
         }
     })
+})
+
+app.get('/wake', (req, res) => {
+    res.send('i am awake.')
 })
 
 const songkickMetroUrl = (location) => {
